@@ -14,6 +14,9 @@ int main() {
                 << "2: load price\n"
                 << "3: show price\n"
                 << "4: show price by ascending\n"
+                << "5: show price by descending\n"
+                << "6: show discount by ascending\n"
+                << "7: show discount by descending\n"
                 << "0: exit\n"
                 << "> ";
         if (!(std::cin >> choice)) {
@@ -41,6 +44,12 @@ int main() {
             case 4:
                 price->show_by_price_ascending();
                 break;
+            case 5:
+                price->show_by_price_descending();
+            case 6:
+                price->show_by_discount_ascending();
+            case 7:
+                price->show_by_discount_descending();
             case 0:
                 return 0;
             default:

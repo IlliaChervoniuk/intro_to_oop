@@ -14,5 +14,12 @@ struct Price {
     bool load();
     void show() const;
     void show_by_price_ascending();
+    void show_by_price_descending();
+    void show_by_discount_ascending();
+    void show_by_discount_descending();
 
+private:
+    void _swap12();
+    void _swap23(ListNode* node);
 };
+

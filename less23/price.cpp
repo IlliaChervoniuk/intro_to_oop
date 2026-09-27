@@ -1,150 +1,236 @@
-#include <iostream>
 #include "price.h"
-
+#include <iostream>
 
 bool Price::init() {
-    std::ofstream file(PRICE_FILENAME);
-    if (!file.is_open()) {
-        std::cout << "File open error\n";
-        return false;
-    }
-    Product product = {"Black Pencil", 14.95f, 20, 0};
-    product.save_to_file(file);
+	std::ofstream file(PRICE_FILENAME);
+	if (!file.is_open()) {
+		std::cout << "File open error";
+		return false;
+	}
+	Product product = { "Black Pencil", 14.95f, 20, 0 };
+	product.save_to_file(file);
 
-    product = {"Blue Pen", 19.95f, 25, 5};
-    product.save_to_file(file);
+	product = { "Blue Pen", 19.95f, 25, 5 };
+	product.save_to_file(file);
 
-    product = {"Green Whiteboard Marker", 17.50f, 10, 10};
-    product.save_to_file(file);
+	product = { "Green Whiteboard Marker", 17.50f, 10, 10 };
+	product.save_to_file(file);
 
-    product = {"Red Whiteboard Marker", 17.55f, 12, 20};
-    product.save_to_file(file);
+	product = { "Lined Copybook", 7.50f, 20, 10 };
+	product.save_to_file(file);
 
-    product = {"Copybook", 7.55f, 20, 5};
-    product.save_to_file(file);
+	product = { "Grided Copybook", 7.50f, 20, 5 };
+	product.save_to_file(file);
 
-    product = {"Ruler 30cm", 5.3f, 100, 0};
-    product.save_to_file(file);
+	product = { "Ruller 30cm", 3.50f, 50, 0 };
+	product.save_to_file(file);
 
-    product = {"Ruler 20cm", 2.3f, 100, 0};
-    product.save_to_file(file);
-
-
-    file.close();
-    return true;
+	file.close();
+	return true;
 }
 
 bool Price::load() {
-    std::ifstream file(PRICE_FILENAME);
-    if (!file.is_open()) {
-        std::cout << "File open error\n";
-        return false;
-    }
-    ListNode *last = NULL;
-
-    if (first) {
-        do {
-            last = first->next;
-            delete first;
-            first = last;
-        } while (first);
-    }
-
-    Product product;
-
-    while (product.load_from_file(file)) {
-        if (last == NULL) {
-            first = last = new ListNode;
-            first->product = product;
-            first->next = NULL;
-        } else {
-            last->next = new ListNode;
-            last->next->product = product;
-            last->next->next = NULL;
-            last = last->next;
-        }
-    }
-    file.close();
-    return true;
+	std::ifstream file(PRICE_FILENAME);
+	if (!file.is_open()) {
+		std::cout << "File open error";
+		return false;
+	}
+	ListNode* last = NULL;
+	// видаляємо наявні товари перед зчитуванням файлу
+	if (first) {   // якщо вони є
+		do {
+			last = first->next;
+			delete first;
+			first = last;
+		} while (first);  // while (first != NULL)
+	}
+	Product product;
+	while (product.load_from_file(file)) {
+		if (last == NULL) {
+			first = last = new ListNode;
+			last->product = product;
+			last->next = NULL;
+		}
+		else {
+			last->next = new ListNode;
+			last->next->product = product;
+			last->next->next = NULL;
+			last = last->next;
+		}
+	}
+	file.close();
+	return true;
 }
 
 void Price::show() const {
-    if (first == nullptr) {
-        std::cout << "Price is empty" << std::endl;
-        return;
-    }
-    ListNode *node = first;
-    while (node != nullptr) {
-        std::cout << node->product.to_string() << std::endl;
-        node = node->next;
-    }
+	if (first == NULL) {
+		std::cout << "Price is empty" << std::endl;
+		return;
+	}
+	ListNode* node = first;
+	while (node) {
+		std::cout << node->product.to_string() << std::endl;
+		node = node->next;
+	}
+}
+
+void Price::_swap12() {
+	ListNode* tmp;
+	tmp = first->next;         // n2
+	first->next = tmp->next;   // n1->next = n3
+	tmp->next = first;         // n2->next = n1
+	first = tmp;
+}
+
+void Price::_swap23(ListNode* node) {
+	ListNode* tmp;
+	tmp = node->next;             // n2
+	node->next = tmp->next;       // n1->next = n3
+	tmp->next = tmp->next->next;  // n2->next = n4
+	node->next->next = tmp;       // n3->next = n2
+}
+
+void Price::show_by_price_descending() {
+	if (first == NULL) {
+		std::cout << "Price is empty" << std::endl;
+		return;
+	}
+	if (first->next == NULL) {
+		std::cout << first->product.to_string() << std::endl;
+		return;
+	}
+	bool is_ordered;
+	do {
+		is_ordered = true;
+		ListNode* node = first;
+		// окремо перевіряємо перші два
+		if (node->product.price < node->next->product.price) {
+			_swap12();
+			node = first;
+			is_ordered = false;
+		}
+		while (node->next->next) {
+			if (node->next->product.price < node->next->next->product.price) {
+				_swap23(node);
+				is_ordered = false;
+			}
+			node = node->next;
+		}
+	} while (!is_ordered);
+	// відображення передаємо на інший метод
+	show();
+}
+
+void Price::show_by_discount_ascending() {
+	if (first == NULL) {
+		std::cout << "Discount is empty" << std::endl;
+		return;
+	}
+	if (first->next == NULL) {
+		std::cout << first->product.to_string() << std::endl;
+		return;
+	}
+	bool is_ordered;
+	do {
+		is_ordered = true;
+		ListNode* node = first;
+		// окремо перевіряємо перші два
+		if (node->product.discount_percent > node->next->product.discount_percent) {
+			_swap12();
+			node = first;
+			is_ordered = false;
+		}
+		while (node->next->next) {
+			if (node->next->product.discount_percent > node->next->next->product.discount_percent) {
+				_swap23(node);
+				is_ordered = false;
+			}
+			node = node->next;
+		}
+	} while (!is_ordered);
+	// відображення передаємо на інший метод
+	show();
+}
+
+void Price::show_by_discount_descending() {
+	if (first == NULL) {
+		std::cout << "Discount is empty" << std::endl;
+		return;
+	}
+	if (first->next == NULL) {
+		std::cout << first->product.to_string() << std::endl;
+		return;
+	}
+	bool is_ordered;
+	do {
+		is_ordered = true;
+		ListNode* node = first;
+		// окремо перевіряємо перші два
+		if (node->product.discount_percent < node->next->product.discount_percent) {
+			_swap12();
+			node = first;
+			is_ordered = false;
+		}
+		while (node->next->next) {
+			if (node->next->product.discount_percent < node->next->next->product.discount_percent) {
+				_swap23(node);
+				is_ordered = false;
+			}
+			node = node->next;
+		}
+	} while (!is_ordered);
+	// відображення передаємо на інший метод
+	show();
 }
 
 void Price::show_by_price_ascending() {
-    // сортування - переставляння неправильно впорядкованих елементів
-    // до тих пір, поки їх не стане (всі у правильному порядку)
-    /* Перестановка у переліку :
-    * [p1|n]->[p2|n]->[p3|n]->0  поміняти місцями p1 і p2
-    * а) поміняти значення P в двох вузлах (через проміжну змінну)
-    *    [p1|n]->[p3|n]->[p2|n]
-    *    ! через те, що структури великі, це тягне за собою багато операцій
-    * б) поміняти покажчики на вузли
-    *    [p1|n]--------->[p3|n]  - більш ефективна операція
-    *        p4<-[p2|n]<-------|
-    */
-    if (first == NULL) {
-        std::cout <<"Price is empty" << std::endl;
-        return;
-    }
-    if (first->next == NULL) {
-        std::cout << first->product.to_string() << std::endl;
-        return;
-    }
-    bool is_order;
-    do {
-        is_order = true;
-        ListNode *node = first;
-        if (node->product.price > node->next->product.price) {
-            //f
-            //[p1|n]->[p2|n]->[p3|n]
-            //
-            // ---->f
-            //      [p2|n]
-            //<---------|
-            //[p1|n]---------->[p3|n]
-            ListNode *tmp = node->next;
-            first->next = first->next->next;    // p1.next = p3 (p2.next)
-            node->next->next = first;           // p2.next =p1
-            first = tmp;                        //----->f
-            node = first;
-            is_order = false;
-        }
-        while (node->next->next) {
-            ListNode *tmp = node->next; //tmp = p2
-            if (node->product.price > node->next->next->product.price) {
-                node->next = node->next->next; // p1.next = p3
-                tmp->next = tmp->next->next; // p2.next = p3.next
-                tmp->next->next = tmp; //p3.next = p2
-                is_order = false;
-            }
-            node = tmp;
-        }
-    } while (!is_order);
-    show();
+	// сортування - переставляння неправильно впорядкованих елементів
+	// до тих пір, поки їх не стане (всі у правильному порядку)
+	/* Перестановка у переліку :
+	* [p1|n]->[p2|n]->[p3|n]->[p4|n]   поміняти місцями p2 i p3
+	* а) поміняти значення Р в двох вузлах (через проміжну змінну)
+	*    [p1|n]->[p3|n]->[p2|n]
+	*   ! через те, що структури великі, це тягне за собою багато операцій
+	* б) поміняти покажчики на вузли
+	*    [p1|n]---------->[p3|n]   - більш ефективна операція
+	         p4<-[p2|n]<------|
+
+		Для перших двох елементів:
+		f
+		[p1|n]->[p2|n]->[p3|n]
+
+		 ---->f
+		      [p2|n]
+		 <--------|
+		[p1|n]--------->[p3|n]
+	*/
+	// окремо обробляємо випадки, коли перелік порожній або в ньому один елемент
+	if (first == NULL) {
+		std::cout << "Price is empty" << std::endl;
+		return;
+	}
+	if (first->next == NULL) {
+		std::cout << first->product.to_string() << std::endl;
+		return;
+	}
+	bool is_ordered;
+	do {
+		is_ordered = true;
+		ListNode* node = first;
+		// окремо перевіряємо перші два
+		if (node->product.price > node->next->product.price) {
+			_swap12();
+			node = first;
+			is_ordered = false;
+		}
+		while (node->next->next) {
+			if (node->next->product.price > node->next->next->product.price) {
+				_swap23(node);
+				is_ordered = false;
+			}
+			node = node->next;
+		}
+	} while (!is_ordered);
+	// відображення передаємо на інший метод
+	show();
 }
-
-/*git - VCS (Version Control System)система, що дозволяє
- "зберігати" версії коду з можливістю повернення до попередніх
- версій, а такожутворення відгалужень (гілок) з різним розвиткомпроєкту.
- Це також спрощує сумісну роботу з проєктом різними учасниками.
- f
- Github – hub (місце для розміщення) репозиторіїв проєктів.
- Репозиторій – частина проєкту, до якої входить код, напрацьований розробниками,
- і не входять загальні ресурси, які можна довантажити окремо (загальні бібліотеки тощо),
- а також результати компіляції та збірки (проміжні та виконавчі файли).
- Відмінність задається спец.файлом ".gitignore"
-
- Для того щоб створити та опублікувати репозиторій необхідно
- – ініціалізувати репозиторій Git->Create Git Repository
- – створити перший коміт
-*/
