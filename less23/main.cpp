@@ -46,10 +46,13 @@ int main() {
                 break;
             case 5:
                 price->show_by_price_descending();
+                break;
             case 6:
                 price->show_by_discount_ascending();
+                break;
             case 7:
                 price->show_by_discount_descending();
+                break;
             case 0:
                 return 0;
             default:

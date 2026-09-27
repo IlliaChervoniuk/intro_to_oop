@@ -36,6 +36,7 @@ bool Price::load() {
 		return false;
 	}
 	ListNode* last = NULL;
+
 	// видаляємо наявні товари перед зчитуванням файлу
 	if (first) {   // якщо вони є
 		do {
@@ -44,6 +45,7 @@ bool Price::load() {
 			first = last;
 		} while (first);  // while (first != NULL)
 	}
+
 	Product product;
 	while (product.load_from_file(file)) {
 		if (last == NULL) {
