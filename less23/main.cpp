@@ -3,19 +3,19 @@
 #include <string>
 #include "product.h"
 #include "price.h"
-int main()
-{
+
+int main() {
     setlocale(LC_ALL, "UA");
-    Price* price = new Price();
+    Price *price = new Price();
     while (true) {
         int choice;
         std::cout << "\nChoice an action:\n"
-            << "1: init price\n"
-            << "2: load price\n"
-            << "3: show price\n"
-            << "4: show price by ascending\n"
-            << "0: exit\n"
-            << "> ";
+                << "1: init price\n"
+                << "2: load price\n"
+                << "3: show price\n"
+                << "4: show price by ascending\n"
+                << "0: exit\n"
+                << "> ";
         if (!(std::cin >> choice)) {
             break;
         }
@@ -24,16 +24,14 @@ int main()
             case 1:
                 if (price->init()) {
                     std::cout << "Price init success" << std::endl;
-                }
-                else {
+                } else {
                     std::cout << "Price init error" << std::endl;
                 }
                 break;
             case 2:
                 if (price->load()) {
                     std::cout << "Price load success" << std::endl;
-                }
-                else {
+                } else {
                     std::cout << "Price load error" << std::endl;
                 }
                 break;
@@ -52,6 +50,7 @@ int main()
 
     return 0;
 }
+
 /* git - VCS (Version Control System)
 система, що дозволяє "зберігати" версії коду з
 можливістю повернення до попередніх версій, а також
@@ -113,6 +112,7 @@ Commit – "збереження" поточного стану файлів р�
 ⚬ натискаємо
 
 ----------- СКВ продовження. Конфлікти. ------------------
-
+Конфлікти виникають, коли різні "гілки" (зміни з різних джерел)
+намагаються внести дані, що суперечать один іншому. Наприклад,
+було внесено зміни в один і той самий файл.
 */
-
