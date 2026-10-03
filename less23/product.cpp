@@ -1,7 +1,7 @@
 #include <format>      // на відміну від стандартних бібліотек, що підключаються <>,
 #include "product.h"  // власні бібліотеки підключаються ""
 
-// реалізуємо методи структури через доступ "struct::method".
+// реалізуємо методи структури через доступ "struct::method".:
 bool Product::load_from_file(std::ifstream& file) {
     std::getline(file, name);
     if (name.empty()) {
