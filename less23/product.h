@@ -35,4 +35,4 @@ struct Product {
     std::string to_string();
 };
 
-#endif  // PRODUCT_H
+#endif  // PRODUCT_H\

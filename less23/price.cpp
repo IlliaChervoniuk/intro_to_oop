@@ -81,7 +81,7 @@ void Price::_swap12() {
 	ListNode* tmp;
 	tmp = first->next;         // n2
 	first->next = tmp->next;   // n1->next = n3
-	tmp->next = first;         // n2->next = n1
+	tmp->next = first;         // n2->next = n1.
 	first = tmp;
 }
 
