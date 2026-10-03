@@ -55,7 +55,7 @@ int main() {
                 price->show_by_discount_descending();
                 break;
             case 8:
-                price->sortByPopularity();
+                price->show_by_popularity();
                 break;
             case 0:
                 return 0;

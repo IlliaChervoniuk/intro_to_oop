@@ -17,6 +17,8 @@ bool Product::load_from_file(std::ifstream& file) {
     std::getline(file, line);
     discount_percent = std::stoi(line);
 
+    std::getline(file, line);
+    order = std::stoi(line);
     return true;
 }
 
@@ -24,7 +26,8 @@ void Product::save_to_file(std::ofstream& file) const {
     file << name << "\n"
         << price << "\n"
         << stock << "\n"
-        << discount_percent << "\n";
+        << discount_percent << "\n"
+        << order << "\n";
 }
 
 std::string Product::to_string() {

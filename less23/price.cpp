@@ -32,24 +32,21 @@ bool Price::init() {
 bool Price::load() {
 	std::ifstream file(PRICE_FILENAME);
 	if (!file.is_open()) {
-		std::cout << "File open error";
+		std::cout << "File open error" << std::endl;
 		return false;
 	}
 	ListNode* last = NULL;
 
-	// видаляємо наявні товари перед зчитуванням файлу
-	if (first) {   // якщо вони є
+	if (first) {
 		do {
 			last = first->next;
 			delete first;
 			first = last;
-		} while (first);  // while (first != NULL)
+		} while (first);
 	}
 
 	Product product;
-	int current_order = 1;
 	while (product.load_from_file(file)) {
-		product.order = current_order++;
 		if (last == NULL) {
 			first = last = new ListNode;
 			last->product = product;
@@ -65,6 +62,8 @@ bool Price::load() {
 	file.close();
 	return true;
 }
+
+
 
 void Price::show() const {
 	if (first == NULL) {
@@ -188,38 +187,34 @@ void Price::show_by_discount_descending() {
 	show();
 }
 
-void Price::sortByPopularity() {
-		if (first == NULL) {
-			std::cout << "Price is empty" << std::endl;
-			return;
+void Price::show_by_popularity() {
+	if (first == NULL) {
+		std::cout << "Price is empty" << std::endl;
+		return;
+	}
+	if (first->next == NULL) {
+		std::cout << first->product.to_string() << std::endl;
+		return;
+	}
+	bool is_ordered;
+	do {
+		is_ordered = true;
+		ListNode* node = first;
+		if (node->product.order > node->next->product.order) {
+			_swap12();
+			node = first;
+			is_ordered = false;
 		}
-
-		if (first->next == NULL) {
-			std::cout << first->product.to_string() << std::endl;
-			return;
-		}
-
-		bool is_ordered;
-		do {
-			is_ordered = true;
-			ListNode* node = first;
-
-			if (node->product.order > node->next->product.order) {
-				_swap12();
-				node = first;
+		while (node->next->next) {
+			if (node->next->product.order > node->next->next->product.order) {
+				_swap23(node);
 				is_ordered = false;
 			}
+			node = node->next;
+		}
+	} while (!is_ordered);
 
-			while (node->next->next) {
-				if (node->next->product.order > node->next->next->product.order) {
-					_swap23(node);
-					is_ordered = false;
-				}
-				node = node->next;
-			}
-		} while (!is_ordered);
-
-		show();
+	show();
 }
 
 

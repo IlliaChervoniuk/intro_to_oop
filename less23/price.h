@@ -17,7 +17,7 @@ struct Price {
     void show_by_price_descending();
     void show_by_discount_ascending();
     void show_by_discount_descending();
-    void sortByPopularity();
+    void show_by_popularity();
 
 private:
     void _swap12();
