@@ -47,7 +47,9 @@ bool Price::load() {
 	}
 
 	Product product;
+	int current_order = 1;
 	while (product.load_from_file(file)) {
+		product.order = current_order++;
 		if (last == NULL) {
 			first = last = new ListNode;
 			last->product = product;
@@ -90,6 +92,35 @@ void Price::_swap23(ListNode* node) {
 	node->next = tmp->next;       // n1->next = n3
 	tmp->next = tmp->next->next;  // n2->next = n4
 	node->next->next = tmp;       // n3->next = n2
+}
+
+void Price::show_by_popularity() {
+	if (first == NULL) {
+		std::cout << "Price is empty" << std::endl;
+		return;
+	}
+	if (first->next == NULL) {
+		std::cout << first->product.to_string() << std::endl;
+		return;
+	}
+	bool is_ordered;
+	do {
+		is_ordered = true;
+		ListNode* node = first;
+		if (node->product.order > node->next->product.order) {
+			_swap12();
+			node = first;
+			is_ordered = false;
+		}
+		while (node->next->next) {
+			if (node->next->product.order > node->next->next->product.order) {
+				_swap23(node);
+				is_ordered = false;
+			}
+			node = node->next;
+		}
+	} while (!is_ordered);
+	show();
 }
 
 void Price::show_by_price_descending() {
@@ -186,27 +217,6 @@ void Price::show_by_discount_descending() {
 }
 
 void Price::show_by_price_ascending() {
-	// сортування - переставляння неправильно впорядкованих елементів
-	// до тих пір, поки їх не стане (всі у правильному порядку)
-	/* Перестановка у переліку :
-	* [p1|n]->[p2|n]->[p3|n]->[p4|n]   поміняти місцями p2 i p3
-	* а) поміняти значення Р в двох вузлах (через проміжну змінну)
-	*    [p1|n]->[p3|n]->[p2|n]
-	*   ! через те, що структури великі, це тягне за собою багато операцій
-	* б) поміняти покажчики на вузли
-	*    [p1|n]---------->[p3|n]   - більш ефективна операція
-	         p4<-[p2|n]<------|
-
-		Для перших двох елементів:
-		f
-		[p1|n]->[p2|n]->[p3|n]
-
-		 ---->f
-		      [p2|n]
-		 <--------|
-		[p1|n]--------->[p3|n]
-	*/
-	// окремо обробляємо випадки, коли перелік порожній або в ньому один елемент
 	if (first == NULL) {
 		std::cout << "Price is empty" << std::endl;
 		return;
