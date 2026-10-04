@@ -1,7 +1,7 @@
 #pragma once
 #include "product.h"
 
-struct ListNode {   // для зв'язного списку.
+struct ListNode {   // для зв'язного списку.::
     Product product;
     ListNode* next;
 };

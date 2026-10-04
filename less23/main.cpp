@@ -17,7 +17,7 @@ int main() {
                 << "5: show price by descending\n"
                 << "6: show discount by ascending\n"
                 << "7: show discount by descending\n"
-                << "8: show by popularity \n"
+                << "8: show by popularity. \n"
                 << "0: exit\n"
                 << "> ";
         if (!(std::cin >> choice)) {
