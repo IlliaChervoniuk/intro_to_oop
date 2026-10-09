@@ -1,6 +1,7 @@
 #include "intro.h"
 #include <iostream>
 #include "fraction.h"
+#include "vector2.h"
 
 void intro() {
 	// запуск демонстрації
@@ -24,6 +25,15 @@ void intro() {
 	std::cout
 		<< frac5.to_string() << std::endl
 		<< frac6->to_string() << std::endl;
+
+	vector2 v1;
+	vector2 v2(3.5, 7.2, "A");
+	vector2 v3 = v2;
+	v3.setName("A_Copy");
+
+	std::cout << v1.to_string() << std::endl;
+	std::cout << v2.to_string() << std::endl;
+	std::cout << v3.to_string() << std::endl;
 
 	delete frac2;
 	delete frac4;
