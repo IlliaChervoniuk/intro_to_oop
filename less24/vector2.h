@@ -9,14 +9,14 @@ private:
     char* name;
 public:
     vector2();
-    vector2(double x, double y, char* name);
+    vector2(double x, double y, const char* name);
     vector2(const vector2& other);
 
     ~vector2();
 
     double getX() const;
     double getY() const;
-    char* getName();
+    char* getName() const;
 
     void setX(double x);
     void setY(double y);
