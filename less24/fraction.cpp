@@ -37,11 +37,10 @@ fraction_t::fraction_t(fraction_t& other) {
 	this->denominator = other.denominator;
 	// для референсного ресурсу створюємо копію
 	if (other.name != NULL) {
-		if (other.name != nullptr) {
-			this->name = new char[strlen(other.name) + 1];
-			strcpy(this->name, other.name);
-		}
-		//std::cout << "Copy constructor: copy from " << (void*)other.name << " to "
+		size_t len = strlen(other.name) + 1;
+		this->name = new char[len];
+		strcpy(this->name, other.name);
+		//std::cout << " constructor: copy from " << (void*)other.name << " to "
 		//	<< (void*)(this->name) << std::endl;
 	}
 	else {
@@ -68,6 +67,8 @@ fraction_t::fraction_t(fraction_t && other) noexcept {
 	this->denominator = other.denominator;
 	this->name = other.name;
 	other.name = NULL;
+	std::cout << "New constructor: take from " << (void*)this->name << std::endl;
+
 }
 
 char* fraction_t::get_name() {

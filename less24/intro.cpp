@@ -20,7 +20,7 @@ void intro() {
 		<< frac3.to_string() << std::endl
 		<< frac4->to_string() << std::endl;
 
-	fraction_t frac5(1, 2, (char*)"Half");
+	fraction_t frac5(1, 2, new char[] {"Half"});
 	fraction_t* frac6 = new fraction_t(frac5);
 	std::cout
 		<< frac5.to_string() << std::endl
@@ -31,9 +31,13 @@ void intro() {
 	vector2 v3 = v2;
 	v3.setName("A_Copy");
 
-	std::cout << v1.to_string() << std::endl;
-	std::cout << v2.to_string() << std::endl;
-	std::cout << v3.to_string() << std::endl;
+	//std::cout << v1.to_string() << std::endl;
+	//std::cout << v2.to_string() << std::endl;
+	//std::cout << v3.to_string() << std::endl;
+
+	fraction_t d = std::move(fraction_t::decil());
+	std::cout
+		<< d.to_string() << std::endl;
 
 	delete frac2;
 	delete frac4;
