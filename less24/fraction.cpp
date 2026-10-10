@@ -54,7 +54,7 @@ fraction_t::fraction_t(fraction_t& other) {
 	// delete A - звільнення 0x123 --> В посилається на видалений ресурс
 }
 
-fraction_t::fraction_t(fraction_t && other) {
+fraction_t::fraction_t(fraction_t && other) noexcept {
 	/* Конструктор перенесення (move constructor) викликається тоді, коли
 	 * інший об'єкт (other) підлягає знищенню, наприклад, коли він передається
 	 * як результат роботи функції.
